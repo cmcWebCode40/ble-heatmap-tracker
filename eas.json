@@ -1,0 +1,59 @@
+{
+  "cli": {
+    "version": ">= 3.9.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "resourceClass": "m-medium"
+      },
+      "channel": "development"
+    },
+    "development-simulator": {
+      "developmentClient": true,
+      "extends": "development",
+      "ios": {
+        "simulator": true
+      },
+      "channel": "development"
+    },
+    "preview": {
+      "distribution": "internal",
+      "channel": "staging",
+      "ios": {
+        "resourceClass": "m-medium"
+      }
+    },
+    "production": {
+      "channel": "production",
+      "ios": {
+        "resourceClass": "m-medium"
+      }
+    }
+  },
+  "submit": {
+    "preview": {
+      "ios": {
+        "appleId": "infinitymichael7@gmail.com",
+        "ascAppId": "6476326261",
+        "appleTeamId": "6HJ5BJBXQ8"
+      },
+      "android": {
+        "track": "internal"
+      }
+    },
+    "production": {
+      "ios": {
+        "appleId": "infinitymichael7@gmail.com",
+        "ascAppId": "6476326261",
+        "appleTeamId": "6HJ5BJBXQ8"
+      },
+      "android": {
+        "track": "production"
+      }
+    }
+  }
+}

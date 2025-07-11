@@ -16,7 +16,12 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "android.permission.BLUETOOTH",
+        "android.permission.BLUETOOTH_ADMIN",
+        "android.permission.BLUETOOTH_CONNECT"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -26,6 +31,15 @@
     "plugins": [
       "expo-router",
       [
+        "react-native-ble-manager",
+        {
+          "isBleRequired": true,
+          "neverForLocation": true,
+          "companionDeviceEnabled": false,
+          "bluetoothAlwaysPermission": "Allow Ble Heatmap Tracking to scan nearby."
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",
@@ -33,7 +47,8 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "react-native-ble-manager"
     ],
     "experiments": {
       "typedRoutes": true
