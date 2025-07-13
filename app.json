@@ -9,15 +9,25 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "This app uses your location to show nearby BLE devices."
+      },
+      "bundleIdentifier": "com.cmcwebcode.bleheatmaptracking"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#ffffff",
+        "permissions": [
+          "ACCESS_FINE_LOCATION"
+        ]
       },
       "edgeToEdgeEnabled": true,
+      "package": "com.cmcwebcode.bleheatmaptracking",
       "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.BLUETOOTH",
         "android.permission.BLUETOOTH_ADMIN",
         "android.permission.BLUETOOTH_CONNECT"
@@ -30,6 +40,14 @@
     },
     "plugins": [
       "expo-router",
+      [
+        "expo-location",
+        {
+          "locationAlwaysPermission": "Allow Ble Heatmap Tracking to use your location. you can see nearby device represented on a map",
+          "locationWhenInUsePermission": "Allow Ble Heatmap Tracking to use your location. you can see nearby device represented on a map.",
+          "locationAlwaysAndWhenInUsePermission": "Allow Ble Heatmap Tracking to use your location. By allowing location access, you can see nearby device represented on a map."
+        }
+      ],
       [
         "react-native-ble-manager",
         {
@@ -47,8 +65,7 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ],
-      "react-native-ble-manager"
+      ]
     ],
     "experiments": {
       "typedRoutes": true
