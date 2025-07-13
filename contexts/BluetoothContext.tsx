@@ -1,11 +1,12 @@
+import { StrippedPeripheral } from "@/types/bluetooth";
 import { handleAndroidPermissions } from "@/utils/permission";
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { Alert, Linking, Platform } from "react-native";
 import BleManager, {
-    BleScanCallbackType,
-    BleScanMatchMode,
-    BleScanMode,
-    Peripheral,
+  BleScanCallbackType,
+  BleScanMatchMode,
+  BleScanMode,
+  Peripheral,
 } from "react-native-ble-manager";
 
 declare module "react-native-ble-manager" {
@@ -15,22 +16,37 @@ declare module "react-native-ble-manager" {
   }
 }
 
-export const BluetoothContext = createContext({});
+type CreateContext = {
+  startScan: () => Promise<void>;
+  peripherals: any;
+  isScanning: boolean;
+  discoveredPeripherals: StrippedPeripheral[];
+};
+
+export const BluetoothContext = createContext<CreateContext>({
+  isScanning: false,
+  peripherals: null,
+  discoveredPeripherals:[],
+  startScan: async () => undefined,
+});
 
 const SECONDS_TO_SCAN_FOR = 5;
 const SERVICE_UUIDS: string[] = [];
 const ALLOW_DUPLICATES = true;
 
-
 interface BluetoothProviderProps {
-    children:React.ReactNode
+  children: React.ReactNode;
 }
 
-export const BluetoothProvider:React.FunctionComponent<BluetoothProviderProps> = ({ children }) => {
+export const BluetoothProvider: React.FunctionComponent<
+  BluetoothProviderProps
+> = ({ children }) => {
   const [isScanning, setIsScanning] = useState(false);
   const [peripherals, setPeripherals] = useState(
-    new Map<Peripheral["id"], Peripheral>()
+    new Map<Peripheral["id"], Peripheral>(null)
   );
+
+  const discoveredPeripherals = Array.from(peripherals.values())
 
   useEffect(() => {
     BleManager.start({ showAlert: false })
@@ -59,7 +75,7 @@ export const BluetoothProvider:React.FunctionComponent<BluetoothProviderProps> =
   };
 
   const handleDiscoverPeripheral = (peripheral: Peripheral) => {
-    console.debug("[handleDiscoverPeripheral] new BLE peripheral=", peripheral);
+    console.log("[handleDiscoverPeripheral] new BLE peripheral: ", peripheral);
     if (!peripheral.name) {
       peripheral.name = "NO NAME";
     }
@@ -78,6 +94,7 @@ export const BluetoothProvider:React.FunctionComponent<BluetoothProviderProps> =
   };
 
   const startScan = async () => {
+    console.log("START, SCAN");
     const state = await BleManager.checkState();
     console.log(state);
     if (state === "off") {
@@ -99,7 +116,7 @@ export const BluetoothProvider:React.FunctionComponent<BluetoothProviderProps> =
         enableBluetooth();
       }
     }
-    if (!isScanning) {
+    // if (!isScanning) {
       setPeripherals(new Map<Peripheral["id"], Peripheral>());
       try {
         console.debug("[startScan] starting scan...");
@@ -118,10 +135,23 @@ export const BluetoothProvider:React.FunctionComponent<BluetoothProviderProps> =
       } catch (error) {
         console.error("[startScan] ble scan error thrown", error);
       }
-    }
+    // }
   };
 
   return (
-    <BluetoothContext.Provider value={{}}>{children}</BluetoothContext.Provider>
+    <BluetoothContext.Provider
+      value={{
+        startScan,
+        isScanning,
+        peripherals,
+        discoveredPeripherals
+      }}
+    >
+      {children}
+    </BluetoothContext.Provider>
   );
+};
+
+export const useBluetooth = () => {
+  return useContext(BluetoothContext);
 };

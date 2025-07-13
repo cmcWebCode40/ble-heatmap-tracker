@@ -1,12 +1,19 @@
-import React from 'react';
+import React from "react";
 
-import { ThemeContextProvider } from './ThemeContext';
+import { BluetoothProvider } from "./BluetoothContext";
+import { ThemeContextProvider } from "./ThemeContext";
 
 type AppContextProps = {
   children: React.ReactNode;
 };
-const AppContextProvider: React.FunctionComponent<AppContextProps> = ({ children }) => {
-  return <ThemeContextProvider>{children}</ThemeContextProvider>;
+const AppContextProvider: React.FunctionComponent<AppContextProps> = ({
+  children,
+}) => {
+  return (
+    <ThemeContextProvider>
+      <BluetoothProvider>{children}</BluetoothProvider>
+    </ThemeContextProvider>
+  );
 };
 
 export default AppContextProvider;
