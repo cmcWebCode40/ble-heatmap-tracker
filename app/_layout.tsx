@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import '../global.css';
 
+import { AppContextProvider } from '@/contexts';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function RootLayout() {
@@ -19,11 +20,18 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <AppContextProvider>
+      <Stack screenOptions={{headerShown:false}}>
+        {/* <Stack.Screen name="(tabs)" options={{ headerShown: false }} /> */}
+        <Stack.Screen name="select-character"  />
+        <Stack.Screen name="scan" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="profile"  />
+        <Stack.Screen name="onboard"  />
+        <Stack.Screen name="index" />
         <Stack.Screen name="+not-found" />
       </Stack>
-      <StatusBar style="auto" />
+      </AppContextProvider>
+      <StatusBar style="light" />
     </ThemeProvider>
   );
 }
