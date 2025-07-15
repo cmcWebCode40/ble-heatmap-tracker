@@ -1,5 +1,5 @@
 import { StrippedPeripheral } from "@/types/bluetooth";
-import { handleAndroidPermissions } from "@/utils/permission";
+import { handleAndroidPermissions } from "@/utils";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Alert, Linking, Platform } from "react-native";
 import BleManager, {

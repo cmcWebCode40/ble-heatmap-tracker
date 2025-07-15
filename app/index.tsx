@@ -1,10 +1,15 @@
+import { Button } from "@/components/atoms";
 import { colors } from "@/constants";
 import { useBluetooth } from "@/contexts/BluetoothContext";
 import { useUserLocation } from "@/hooks/useUserLocation";
-import React, { useEffect, useMemo } from "react";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
-import MapView, { Circle, PROVIDER_DEFAULT } from "react-native-maps";
+import { handleAndroidPermissions } from "@/utils";
+import { router } from "expo-router";
+import React, { useEffect, useMemo, useState } from "react";
+import { ActivityIndicator, Image, StyleSheet, View } from "react-native";
+import BleManager from "react-native-ble-manager";
+import MapView, { Circle, Marker } from "react-native-maps";
 import { SafeAreaView } from "react-native-safe-area-context";
+import GPSMarkerImage from "../assets/images/gps_marker.png";
 
 const getHeatColor = (rssi: number) => {
   if (rssi >= -40) return colors.dark.red[100];
@@ -21,19 +26,36 @@ const getEstimatedDistance = (rssi: number, txPower = -59, n = 2.2): number => {
 };
 
 export default function BLEHeatMapScreen() {
+  const [bleStarted, setBleStarted] = useState(false)
   const { location, loading } = useUserLocation();
 
-  const { startScan, isScanning, discoveredPeripherals } = useBluetooth();
+  const { startScan, discoveredPeripherals } = useBluetooth();
 
   useEffect(() => {
-    startScan();
+    handleAndroidPermissions().then(()=>{
+      BleManager.start({ showAlert: false })
+      .then(() => {
+        console.debug("BleManager started.")
+        setBleStarted(true)
+        startScan();
+      })
+      .catch((error: any) =>
+        console.error("BeManager could not be started.", error)
+      );
 
-    const interval = setInterval(() => {
-      startScan();
-      // 10 seconds
-    }, 10000);
+    })
 
-    return () => clearInterval(interval);
+    let interval: NodeJS.Timeout
+    if (bleStarted) {
+      interval = setInterval(() => {
+        startScan();
+        // 10 seconds
+      }, 10000);
+    }
+    return () => {
+      clearInterval(interval);
+      setBleStarted(false)
+    }
   }, []);
 
   const formattedResponse = useMemo(
@@ -66,6 +88,7 @@ export default function BLEHeatMapScreen() {
     return { latOffset, lngOffset };
   };
 
+
   if (loading) {
     return (
       <View className="bg-black-100 flex-1 justify-center items-center">
@@ -79,7 +102,7 @@ export default function BLEHeatMapScreen() {
       {location && (
         <MapView
           style={styles.map}
-          provider={PROVIDER_DEFAULT}
+          provider={"google"}
           customMapStyle={darkMapStyle}
           initialRegion={{
             latitude: location.latitude,
@@ -92,10 +115,10 @@ export default function BLEHeatMapScreen() {
               latitude: location.latitude,
               longitude: location.longitude,
             },
-            pitch: 90,
-            heading: 0,
-            zoom: 18,
-            altitude: 200,
+            pitch: 90, // Tilt angle (0-90 degrees) - this creates 3D effect
+            heading: 4, // Rotation angle
+            zoom: 50,
+            altitude: 1000, // Camera altitude
           }}
           showsBuildings={true}
           showsCompass={true}
@@ -103,6 +126,21 @@ export default function BLEHeatMapScreen() {
           pitchEnabled={true}
           rotateEnabled={true}
         >
+          <Marker
+            coordinate={{
+              latitude: location.latitude,
+              longitude: location.longitude,
+            }}
+            title="You"
+            description="Your current location"
+          >
+            <Image
+              source={GPSMarkerImage}
+              resizeMode="contain"
+              style={{ width: 40, height: 40 }}
+            />
+          </Marker>
+
           {formattedResponse.map((device) => {
             const radius = getEstimatedDistance(device.rssi);
             if (radius < 0) return null;
@@ -122,6 +160,9 @@ export default function BLEHeatMapScreen() {
           })}
         </MapView>
       )}
+      <View className="absolute bottom-10 left-0 right-0 px-6">
+        <Button onPress={() => router.push("/scan")}>View Peripherals</Button>
+      </View>
     </SafeAreaView>
   );
 }
@@ -158,7 +199,7 @@ const darkMapStyle = [
   {
     featureType: "landscape",
     elementType: "geometry",
-    stylers: [{ color: "#202020" }],
+    stylers: [{ color: "#1f3247" }],
   },
   {
     featureType: "poi",
@@ -173,7 +214,7 @@ const darkMapStyle = [
   {
     featureType: "road",
     elementType: "geometry.fill",
-    stylers: [{ color: "#3a3a3a" }],
+    stylers: [{ color: "#2e4b6b" }],
   },
   {
     featureType: "road",
@@ -206,11 +247,3 @@ const darkMapStyle = [
     stylers: [{ color: "#1e88e5" }],
   },
 ];
-
-// if (loading) {
-//   return (
-//     <View className="bg-black-100 flex-1 justify-center items-center">
-//       <ActivityIndicator size={"large"} color={colors.dark.orange[100]} />
-//     </View>
-//   );
-// }
