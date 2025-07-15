@@ -1,5 +1,4 @@
 import { StrippedPeripheral } from "@/types/bluetooth";
-import { handleAndroidPermissions } from "@/utils";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Alert, Linking, Platform } from "react-native";
 import BleManager, {
@@ -60,7 +59,7 @@ export const BluetoothProvider: React.FunctionComponent<
       BleManager.onStopScan(handleStopScan),
     ];
 
-    handleAndroidPermissions();
+    // handleAndroidPermissions();
 
     return () => {
       for (const listener of listeners) {
@@ -94,9 +93,7 @@ export const BluetoothProvider: React.FunctionComponent<
   };
 
   const startScan = async () => {
-    console.log("START, SCAN");
     const state = await BleManager.checkState();
-    console.log(state);
     if (state === "off") {
       if (Platform.OS === "ios") {
         Alert.alert(
@@ -116,7 +113,7 @@ export const BluetoothProvider: React.FunctionComponent<
         enableBluetooth();
       }
     }
-    // if (!isScanning) {
+    if (!isScanning) {
       setPeripherals(new Map<Peripheral["id"], Peripheral>());
       try {
         console.debug("[startScan] starting scan...");
@@ -135,7 +132,7 @@ export const BluetoothProvider: React.FunctionComponent<
       } catch (error) {
         console.error("[startScan] ble scan error thrown", error);
       }
-    // }
+    }
   };
 
   return (

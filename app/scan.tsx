@@ -5,10 +5,10 @@ import { useBluetooth } from "@/contexts/BluetoothContext";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
-    FlatList,
-    Text,
-    TouchableOpacity,
-    View,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
