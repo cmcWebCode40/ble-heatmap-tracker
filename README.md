@@ -1,39 +1,118 @@
-# Welcome to your Expo app 👋
+# Bluetooth HeatMap Tracking App.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This is a proof of concept (POC) app that places nearby discovered ble peripherals on a maps and represents those RSSI (received signal strength indicator) as markers using a Deterministic Pseudo-Random Scatter approach in a Polar Coordinate System.
+
+
+The BLE scanning occurs at a 10 seconds interval to search for new available devices.
+
+- This Project developed using React Native and Expo libraries.
+
 
 ## Get started
 
 1. Install dependencies
 
    ```bash
-   npm install
+   yarn  install
    ```
 
-2. Start the app
 
-   ```bash
-   npx expo start
-   ```
 
-In the output, you'll find options to open the app in a
+**Note:-** 
+1. Due to the use of some native libraries such as :
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- react-native-ble-manager
+- react-native-maps
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+Expo Go does not support native code.
 
-## Get a fresh project
+2. Ensure to add the the google maps API key in the android and ios config section in the `app.json` file.
 
-When you're ready, run:
 
-```bash
-npm run reset-project
+Example: `app.json`
+
+```json
+
+{
+  "expo": {
+     ....
+    "ios": {
+      "config": {
+        "googleMapsApiKey": "GOOGLE_MAP_API_KEY"
+      }
+    },
+    "android": {
+      ....
+      "config": {
+        "googleMaps": {
+          "apiKey": "GOOGLE_MAP_API_KEY"
+        }
+      },
+    }
+  }
+}
+
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+
+### Android Setup
+
+
+1. Ensure you have installed Android studio and setup the android emulator using the  android virtual device (AVD).
+- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
+
+2. run the android app 
+
+   ```bash
+   yarn  android
+   ```
+
+### Ios Setup
+
+
+1. Ensure to have installed xcode application on your mac book.
+
+2. Run `npx expo prebuild --platform ios`  - to generate the ios folder
+
+3. ⁠Open xcode select the generated ios folder .
+
+
+4. ⁠⁠Ensure to select a Team on the signing capability.
+
+<img
+  src="./docs/select_team.jpeg"
+  alt="Alt text"
+  title="React Native API Logger"
+  style="margin:0 4px; width: 200px"
+/>
+
+5. ⁠⁠Connect your iPhone cable.
+
+6. ⁠Click on the simulator/device Tab to add device (your iphone device).
+
+<img
+  src="./docs/manage_devices.jpeg"
+  alt="Alt text"
+  title="React Native API Logger"
+  style="margin:0 4px; width: 200px"
+/>
+
+
+7. ⁠⁠Click on the `start button` to run the build.
+
+<img
+  src="./docs/start_app.jpeg"
+  alt="Alt text"
+  title="React Native API Logger"
+  style="margin:0 4px; width: 200px"
+/>
+
+
+
+### Alternative setup using EAS (Expo application service)
+
+- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
+
 
 ## Learn more
 
@@ -41,10 +120,3 @@ To learn more about developing your project with Expo, look at the following res
 
 - [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
 - [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
