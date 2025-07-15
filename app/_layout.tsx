@@ -22,11 +22,6 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <AppContextProvider>
       <Stack screenOptions={{headerShown:false}}>
-        {/* <Stack.Screen name="(tabs)" options={{ headerShown: false }} /> */}
-        <Stack.Screen name="select-character"  />
-        <Stack.Screen name="scan" options={{ presentation: 'modal' }} />
-        <Stack.Screen name="profile"  />
-        <Stack.Screen name="onboard"  />
         <Stack.Screen name="index" />
         <Stack.Screen name="+not-found" />
       </Stack>
