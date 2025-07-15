@@ -41,9 +41,9 @@ export function useUserLocation() {
   }, [fetchLocation]);
 
   return {
-    location,       // { latitude, longitude }
-    loading,        // true/false
-    error,          // string | null
-    refresh: fetchLocation, // manual re-fetch
+    location,     
+    loading,       
+    error,         
+    refresh: fetchLocation, 
   };
 }
