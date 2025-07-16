@@ -39,5 +39,10 @@ yarn-error.*
 app-example
 
 
-android 
-ios
+# android 
+# ios
+
+
+
+
+sdk.dir=/Users/chinweikemichael/Library/Android/sdk

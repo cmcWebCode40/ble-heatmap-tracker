@@ -56,7 +56,7 @@ export default function BLEHeatMapScreen() {
       clearInterval(interval);
       setBleStarted(false)
     }
-  }, []);
+  }, [bleStarted]);
 
   const formattedResponse = useMemo(
     () =>
