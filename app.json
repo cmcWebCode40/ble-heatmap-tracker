@@ -51,7 +51,7 @@
         "react-native-ble-manager",
         {
           "isBleRequired": true,
-          "neverForLocation": true,
+          "neverForLocation": false,
           "companionDeviceEnabled": false,
           "bluetoothAlwaysPermission": "Allow Ble Heatmap Tracking to scan nearby."
         }
