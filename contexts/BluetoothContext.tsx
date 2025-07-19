@@ -48,18 +48,11 @@ export const BluetoothProvider: React.FunctionComponent<
   const discoveredPeripherals = Array.from(peripherals.values())
 
   useEffect(() => {
-    BleManager.start({ showAlert: false })
-      .then(() => console.debug("BleManager started."))
-      .catch((error: any) =>
-        console.error("BeManager could not be started.", error)
-      );
 
     const listeners: any[] = [
       BleManager.onDiscoverPeripheral(handleDiscoverPeripheral),
       BleManager.onStopScan(handleStopScan),
     ];
-
-    // handleAndroidPermissions();
 
     return () => {
       for (const listener of listeners) {
@@ -113,26 +106,21 @@ export const BluetoothProvider: React.FunctionComponent<
         enableBluetooth();
       }
     }
-    if (!isScanning) {
+    // if (isScanning) {
       setPeripherals(new Map<Peripheral["id"], Peripheral>());
       try {
         console.debug("[startScan] starting scan...");
         setIsScanning(true);
-        BleManager.scan(SERVICE_UUIDS, SECONDS_TO_SCAN_FOR, ALLOW_DUPLICATES, {
+        await BleManager.scan(SERVICE_UUIDS, SECONDS_TO_SCAN_FOR, ALLOW_DUPLICATES, {
           matchMode: BleScanMatchMode.Sticky,
           scanMode: BleScanMode.LowLatency,
           callbackType: BleScanCallbackType.AllMatches,
         })
-          .then(() => {
-            console.debug("[startScan] scan promise returned successfully.");
-          })
-          .catch((err: any) => {
-            console.error("[startScan] ble scan returned in error", err);
-          });
+        console.debug("[startScan] scan promise returned successfully.");
       } catch (error) {
         console.error("[startScan] ble scan error thrown", error);
       }
-    }
+    // }
   };
 
   return (

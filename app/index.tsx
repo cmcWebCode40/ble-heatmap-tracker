@@ -31,6 +31,7 @@ export default function BLEHeatMapScreen() {
 
   const { startScan, discoveredPeripherals } = useBluetooth();
 
+
   useEffect(() => {
     handleAndroidPermissions().then(()=>{
       BleManager.start({ showAlert: false })
@@ -44,6 +45,9 @@ export default function BLEHeatMapScreen() {
       );
 
     })
+  }, [])
+
+  useEffect(() => {
 
     let interval: NodeJS.Timeout
     if (bleStarted) {
