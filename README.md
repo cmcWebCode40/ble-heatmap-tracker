@@ -3,7 +3,7 @@
 This is a proof of concept (POC) app that places nearby discovered ble peripherals on a maps and represents those RSSI (received signal strength indicator) as markers using a Deterministic Pseudo-Random Scatter approach in a Polar Coordinate System.
 
 
-- This Project developed using React Native and Expo libraries.
+- This Project developed using React Native Expo EAS and libraries. 
 
 
 ## Get started
