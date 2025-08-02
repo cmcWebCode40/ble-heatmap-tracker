@@ -3,8 +3,6 @@
 This is a proof of concept (POC) app that places nearby discovered ble peripherals on a maps and represents those RSSI (received signal strength indicator) as markers using a Deterministic Pseudo-Random Scatter approach in a Polar Coordinate System.
 
 
-The BLE scanning occurs at a 10 seconds interval to search for new available devices.
-
 - This Project developed using React Native and Expo libraries.
 
 
